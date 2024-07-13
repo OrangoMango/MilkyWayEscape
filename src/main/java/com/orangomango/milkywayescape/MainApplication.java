@@ -20,9 +20,9 @@ public class MainApplication extends Application{
 	private int fps, frames;
 	private MediaPlayer player;
 
-	private static final int WIDTH = 800;
+	private static final int WIDTH = 1000;
 	private static final int HEIGHT = 600;
-	private static final int WINDOW_WIDTH = 800;
+	private static final int WINDOW_WIDTH = 1000;
 	private static final int WINDOW_HEIGHT = 600;
 	private static final double SCALE = (double)WINDOW_HEIGHT/HEIGHT;
 	private static final double OFFSET_X = (WINDOW_WIDTH-WIDTH*SCALE)/2;
@@ -52,6 +52,7 @@ public class MainApplication extends Application{
 		StackPane pane = new StackPane();
 		Canvas canvas = new Canvas(WINDOW_WIDTH, WINDOW_HEIGHT);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
+		gc.setImageSmoothing(false);
 		pane.getChildren().add(canvas);
 
 		canvas.setFocusTraversable(true);

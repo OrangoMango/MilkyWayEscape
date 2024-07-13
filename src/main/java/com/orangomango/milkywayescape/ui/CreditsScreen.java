@@ -16,7 +16,7 @@ import com.orangomango.milkywayescape.AssetLoader;
 public class CreditsScreen extends GameScreen{
 	private double moveY;
 
-	private static final Font FONT = Font.loadFont(PlayScreen.class.getResourceAsStream("/fonts/font.ttf"), 50);
+	private static final Font FONT = Font.loadFont(PlayScreen.class.getResourceAsStream("/font/font.ttf"), 50);
 
 	public CreditsScreen(int w, int h, HashMap<KeyCode, Boolean> keys){
 		super(w, h, keys);
