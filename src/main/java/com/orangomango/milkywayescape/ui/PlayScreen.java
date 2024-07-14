@@ -23,10 +23,10 @@ public class PlayScreen extends GameScreen{
 		super(w, h, keys);
 
 		Random random = new Random();
-		for (int i = 0; i < Obstacle.COUNT; i++){
-			this.currentObstacles.add(new Obstacle(random.nextInt(Obstacle.TYPE_COUNT), this.currentSpeed, (i+1)*3500));
-		}
 		this.player = new Player(new Point2D(this.width/2, this.height*7/8), 64);
+		for (int i = 0; i < Obstacle.COUNT; i++){
+			this.currentObstacles.add(new Obstacle(this.player, random.nextInt(Obstacle.TYPE_COUNT), this.currentSpeed, (i+1)*3500));
+		}
 	}
 
 	private void rotateScene(double angle){
@@ -56,7 +56,7 @@ public class PlayScreen extends GameScreen{
 		this.currentObstacles.sort((o1, o2) -> -Double.compare(o1.getZpos(), o2.getZpos()));
 
 		for (int i = 0; i < this.currentObstacles.size(); i++){
-			this.currentObstacles.get(i).render(gc, this.width, this.height);
+			this.currentObstacles.get(i).render(gc, this.width, this.height, i == this.currentObstacles.size()-1);
 		}
 		this.player.render(gc);
 

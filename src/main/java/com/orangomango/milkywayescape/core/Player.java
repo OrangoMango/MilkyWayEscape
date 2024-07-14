@@ -13,6 +13,14 @@ public class Player{
 		this.size = size;
 	}
 
+	public Point2D getPosition(){
+		return this.pos;
+	}
+
+	public double getSize(){
+		return this.size;
+	}
+
 	public void render(GraphicsContext gc){
 		gc.setFill(Color.BLUE);
 		gc.fillRect(this.pos.getX()-this.size/2, this.pos.getY()-this.size/2, this.size, this.size);
