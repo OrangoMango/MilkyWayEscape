@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.scene.canvas.*;
 import javafx.animation.*;
+import javafx.util.Duration;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.media.MediaPlayer;
@@ -61,14 +62,12 @@ public class MainApplication extends Application{
 		canvas.setOnMousePressed(e -> this.currentScreen.handleMouseInput(e, SCALE, OFFSET_X));
 		canvas.setOnMouseMoved(e -> this.currentScreen.handleMouseMovement(e, SCALE, OFFSET_X));
 
-		AnimationTimer loop = new AnimationTimer(){
-			@Override
-			public void handle(long time){
-				update(gc);
-				MainApplication.this.frames++;
-			}
-		};
-		loop.start();
+		Timeline loop = new Timeline(new KeyFrame(Duration.millis(1000.0/60), e -> {
+			update(gc);
+			MainApplication.this.frames++;
+		}));
+		loop.setCycleCount(Animation.INDEFINITE);
+		loop.play();
 
 		Scene scene = new Scene(pane, WINDOW_WIDTH, WINDOW_HEIGHT);
 		scene.setFill(Color.BLACK);
