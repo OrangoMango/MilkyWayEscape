@@ -23,7 +23,7 @@ public class UiButton{
 	public void click(double mx, double my){
 		Rectangle2D rect = new Rectangle2D(this.x, this.y, this.width, this.height);
 		if (rect.contains(mx, my)){
-			//Util.playSound("button_click.wav");
+			Util.playSound("click.mp3");
 			this.onClick.run();
 		}
 	}

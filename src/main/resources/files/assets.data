@@ -1,5 +1,14 @@
+/image/background.png
+/image/logo.png
 /image/button_play.png
 /image/button_credits.png
-/image/obstacle_0.png
-/image/obstacle_1.png
-/image/obstacle_2.png
+/image/car.png
+/image/tree.png
+/image/icon.png
+
+/audio/click.mp3
+/audio/crash.wav
+/audio/speed.wav
+/audio/break.wav
+
+/audio/background.wav

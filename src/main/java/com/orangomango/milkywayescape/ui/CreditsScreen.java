@@ -42,11 +42,11 @@ public class CreditsScreen extends GameScreen{
 
 		gc.save();
 		gc.scale(scale, scale);
-		gc.drawImage(AssetLoader.getInstance().getImage("background.jpg"), 0, 0, this.width, this.height);
-		gc.setFill(Color.WHITE);
+		gc.drawImage(AssetLoader.getInstance().getImage("background.png"), 0, 0, this.width, this.height);
+		gc.setFill(Color.BLACK);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setFont(FONT);
-		gc.fillText("TBD", this.width/2.0, this.height/2.0-this.moveY);
+		gc.fillText("Milky Way Escape\nv1.0\n----\n\nCode: OrangoMango\nImages: OrangoMango\nAudio: freesound.org\n\nMade in 24h for the Indie Dev Game Jam #4\nJava - JavaFX", this.width/2.0, this.height/2.0-this.moveY);
 		gc.restore();
 	}
 }

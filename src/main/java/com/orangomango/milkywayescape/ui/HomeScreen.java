@@ -32,8 +32,8 @@ public class HomeScreen extends GameScreen{
 
 		gc.save();
 		gc.scale(scale, scale);
-		//gc.drawImage(AssetLoader.getInstance().getImage("background.jpg"), 0, 0, this.width, this.height);
-		//gc.drawImage(AssetLoader.getInstance().getImage("logo.png"), (this.width-600)/2, -20, 600, 200);
+		gc.drawImage(AssetLoader.getInstance().getImage("background.png"), 0, 0, this.width, this.height);
+		gc.drawImage(AssetLoader.getInstance().getImage("logo.png"), (this.width-600)/2, 15, 600, 200);
 		gc.save();
 		gc.setGlobalAlpha(0.8);
 		this.playButton.render(gc);

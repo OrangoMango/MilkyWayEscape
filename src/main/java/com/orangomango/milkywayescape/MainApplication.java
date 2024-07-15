@@ -31,9 +31,9 @@ public class MainApplication extends Application{
 	public void start(Stage stage){
 		GameScreen.SCREEN_SWITCHER = screen -> this.currentScreen = screen;
 		this.currentScreen = new HomeScreen(WIDTH, HEIGHT, this.keys);
-		/*this.player = new MediaPlayer(AssetLoader.getInstance().getMusic("background.wav"));
+		this.player = new MediaPlayer(AssetLoader.getInstance().getMusic("background.wav"));
 		this.player.setCycleCount(MediaPlayer.INDEFINITE);
-		this.player.play();*/
+		this.player.play();
 
 		Thread frameCounter = new Thread(() -> {
 			while (true){
@@ -76,7 +76,7 @@ public class MainApplication extends Application{
 
 		stage.setTitle("Milky Way Escape");
 		stage.setResizable(false);
-		//stage.getIcons().add(AssetLoader.getInstance().getImage("icon.png"));
+		stage.getIcons().add(AssetLoader.getInstance().getImage("icon.png"));
 		stage.show();
 	}
 
