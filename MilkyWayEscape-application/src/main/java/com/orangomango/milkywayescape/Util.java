@@ -1,5 +1,7 @@
 package com.orangomango.milkywayescape;
 
+import dev.webfx.platform.scheduler.Scheduler;
+
 public class Util{
 	public static final double MIN_SPEED = 3;
 	public static final double MAX_SPEED = 20;
@@ -16,13 +18,6 @@ public class Util{
 	}
 
 	public static void schedule(Runnable r, int delay){
-		new Thread(() -> {
-			try {
-				Thread.sleep(delay);
-				r.run();
-			} catch (InterruptedException ex){
-				ex.printStackTrace();
-			}
-		}).start();
+		Scheduler.scheduleDelay(delay, r);
 	}
 }

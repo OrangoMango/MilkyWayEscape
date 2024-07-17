@@ -1,5 +1,6 @@
 package com.orangomango.milkywayescape;
 
+import dev.webfx.platform.scheduler.Scheduler;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -37,24 +38,15 @@ public class MainApplication extends Application{
 		this.player.setCycleCount(MediaPlayer.INDEFINITE);
 		this.player.play();
 
-		Thread frameCounter = new Thread(() -> {
-			while (true){
-				try {
-					this.fps = this.frames;
-					this.frames = 0;
-					Thread.sleep(1000);
-				} catch (InterruptedException ex){
-					ex.printStackTrace();
-				}
-			}
+		Scheduler.schedulePeriodic(1000, () -> {
+			this.fps = this.frames;
+			this.frames = 0;
 		});
-		frameCounter.setDaemon(true);
-		frameCounter.start();
 
 		StackPane pane = new StackPane();
 		Canvas canvas = new Canvas(WINDOW_WIDTH, WINDOW_HEIGHT);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-		gc.setImageSmoothing(false);
+		//gc.setImageSmoothing(false); // Not yet supported by WebFX
 		pane.getChildren().add(canvas);
 
 		canvas.setFocusTraversable(true);

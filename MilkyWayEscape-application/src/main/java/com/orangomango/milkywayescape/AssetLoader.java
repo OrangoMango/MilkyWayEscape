@@ -1,5 +1,6 @@
 package com.orangomango.milkywayescape;
 
+import dev.webfx.platform.resource.Resource;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.AudioClip;
@@ -24,31 +25,25 @@ public class AssetLoader{
 	}
 
 	public void loadAssets(String fileName){
-		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(fileName)));
-			int loadingMode = 0;
-			String line;
-			while ((line = reader.readLine()) != null){
-				if (line.isBlank()){
-					loadingMode++;
-					continue;
-				}
-
-				switch (loadingMode){
-					case 0:
-						loadImage(line);
-						break;
-					case 1:
-						loadAudio(line);
-						break;
-					case 2:
-						loadMusic(line);
-						break;
-				}
+		String text = Resource.getText(Resource.toUrl(fileName, getClass()));
+		int loadingMode = 0;
+		for (String line : text.split("\n")) {
+			if (/*line.isBlank()*/ line.trim().isEmpty() ){
+				loadingMode++;
+				continue;
 			}
-			reader.close();
-		} catch (IOException ex){
-			ex.printStackTrace();
+
+			switch (loadingMode){
+				case 0:
+					loadImage(line);
+					break;
+				case 1:
+					loadAudio(line);
+					break;
+				case 2:
+					loadMusic(line);
+					break;
+			}
 		}
 	}
 
@@ -66,17 +61,17 @@ public class AssetLoader{
 
 	private void loadImage(String name){
 		String[] data = name.split("/");
-		this.images.put(data[data.length-1], new Image(getClass().getResourceAsStream(name)));
+		this.images.put(data[data.length-1], new Image(Resource.toUrl(name, getClass())));
 	}
 
 	private void loadAudio(String name){
 		String[] data = name.split("/");
-		this.audios.put(data[data.length-1], new AudioClip(getClass().getResource(name).toExternalForm()));
+		this.audios.put(data[data.length-1], new AudioClip(Resource.toUrl(name, getClass())));
 	}
 
 	private void loadMusic(String name){
 		String[] data = name.split("/");
-		this.musics.put(data[data.length-1], new Media(getClass().getResource(name).toExternalForm()));
+		this.musics.put(data[data.length-1], new Media(Resource.toUrl(name, getClass())));
 	}
 
 	public static AssetLoader getInstance(){

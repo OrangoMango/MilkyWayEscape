@@ -6,6 +6,8 @@ module MilkyWayEscape.application {
     requires javafx.base;
     requires javafx.graphics;
     requires javafx.media;
+    requires webfx.platform.resource;
+    requires webfx.platform.scheduler;
 
     // Exported packages
     exports com.orangomango.milkywayescape;

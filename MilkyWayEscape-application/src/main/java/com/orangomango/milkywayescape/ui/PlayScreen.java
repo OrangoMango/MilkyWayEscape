@@ -1,6 +1,8 @@
 package com.orangomango.milkywayescape.ui;
 
 import com.orangomango.milkywayescape.Util;
+import dev.webfx.platform.resource.Resource;
+import dev.webfx.platform.scheduler.Scheduler;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -17,7 +19,7 @@ import com.orangomango.milkywayescape.core.Car;
 import com.orangomango.milkywayescape.core.Tree;
 
 public class PlayScreen extends GameScreen{	
-	private static final Font FONT = Font.loadFont(PlayScreen.class.getResourceAsStream("/font/font.ttf"), 30);
+	private static final Font FONT = Font.loadFont(Resource.toUrl("/font/font.ttf", PlayScreen.class), 30);
 
 	private Car player;
 	private ArrayList<Car> cars = new ArrayList<>();
@@ -37,55 +39,44 @@ public class PlayScreen extends GameScreen{
 		this.player = new Car(480, random.nextInt(4));
 		this.startTime = System.currentTimeMillis();
 
-		Thread spawner = new Thread(() -> {
-			while (this.gameIsRunning){
-				try {
+		Runnable spawner = new Runnable() {
+			@Override
+			public void run() {
+				if (gameIsRunning){
 					// New car
 					Car car = new Car(-150, random.nextInt(4));
 					car.setLane(random.nextInt(4));
-					car.setSpeed(this.speed);
+					car.setSpeed(speed);
 
-					this.cars.add(car);
-					Thread.sleep(this.speed < 7 ? 1000 : 550);
-				} catch (InterruptedException ex){
-					ex.printStackTrace();
+					cars.add(car);
+					Scheduler.scheduleDelay(speed < 7 ? 1000 : 550, this);
 				}
 			}
+		};
+		spawner.run();
+
+		Scheduler.schedulePeriodic(100, scheduled -> {
+			if (!gameIsRunning){
+				scheduled.cancel();
+			} else if (speed >= 7)
+				score += 1 * (player.getLane() <= 1 ? 2 : 1) * (speed >= 10 ? 2 : 1);
 		});
-		spawner.setDaemon(true);
-		spawner.start();
 
-		Thread scoreCounter = new Thread(() -> {
-			while (this.gameIsRunning){
-				try {
-					if (this.speed >= 7) this.score += 1 * (this.player.getLane() <= 1 ? 2 : 1) * (this.speed >= 10 ? 2 : 1);
-
-					Thread.sleep(100);
-				} catch (InterruptedException ex){
-					ex.printStackTrace();
-				}
-			}
-		});
-		scoreCounter.setDaemon(true);
-		scoreCounter.start();
-
-		Thread treeSpawner = new Thread(() -> {
-			while (this.gameIsRunning){
-				try {
+		Runnable treeSpawner = new Runnable() {
+			@Override
+			public void run() {
+				if (gameIsRunning){
 					Tree tree1 = new Tree(random.nextInt(180), -50);
 					Tree tree2 = new Tree(800+random.nextInt(180), -50);
 
-					this.trees.add(tree1);
-					this.trees.add(tree2);
+					trees.add(tree1);
+					trees.add(tree2);
 
-					Thread.sleep(this.speed < 7 ? 1500 : 1000);
-				} catch (InterruptedException ex){
-					ex.printStackTrace();
+					Scheduler.scheduleDelay(speed < 7 ? 1500 : 1000, this);
 				}
 			}
-		});
-		treeSpawner.setDaemon(true);
-		treeSpawner.start();
+		};
+		treeSpawner.run();
 	}
 
 	@Override
@@ -205,7 +196,8 @@ public class PlayScreen extends GameScreen{
 		} else if (this.player.getLane() <= 1 || this.speed >= 10){
 			string = "(x2)";
 		}
-		gc.fillText(String.format("%d %s\n%.1fm\n%.1fkm/h", this.score, string, this.distanceTravelled, Util.mapSpeed(this.speed)), 20, 50);
+		//gc.fillText(String.format("%d %s\n%.1fm\n%.1fkm/h", this.score, string, this.distanceTravelled, Util.mapSpeed(this.speed)), 20, 50);
+		gc.fillText(score + " " + string + "\n" + format(this.distanceTravelled, 1) + "m\n" + format(Util.mapSpeed(this.speed), 2) + "km/h", 20, 50);
 
 		if (!this.gameIsRunning){
 			if (this.diff == -1) this.diff = System.currentTimeMillis()-this.startTime;
@@ -218,10 +210,22 @@ public class PlayScreen extends GameScreen{
 			gc.setTextAlign(TextAlignment.CENTER);
 
 			double oppo = (double)this.oppoDiff/this.diff*100;
-			gc.fillText(String.format("GAME OVER!\nScore: %d\nDistance travelled: %.1fm\nOpposite lane time: %.2f/100\n\n-----\nPress SPACE to continue", this.score, this.distanceTravelled, oppo), this.width/2, this.height/2-100);
+			//gc.fillText(String.format("GAME OVER!\nScore: %d\nDistance travelled: %.1fm\nOpposite lane time: %.2f/100\n\n-----\nPress SPACE to continue", this.score, this.distanceTravelled, oppo), this.width/2, this.height/2-100);
+			gc.fillText("GAME OVER!\nScore: " + this.score + "\nDistance travelled: " + format(this.distanceTravelled, 1) + "m\nOpposite lane time: " + format(oppo, 2) + "/100\n\n-----\nPress SPACE to continue", this.width/2, this.height/2-100);
 			gc.restore();
 		}
 
 		gc.restore();
+	}
+
+	private static String format(double d, int n) {
+		int tens = (int) Math.pow(10, n);
+		int left = (int) d;
+		int right = ((int) d * tens) % tens;
+		StringBuilder s = new StringBuilder("" + right);
+		while (s.length() < n) {
+			s.append("0");
+		}
+		return left + "." + s;
 	}
 }
